@@ -1,0 +1,282 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>Lovable Clone – Gerador de Sites com IA</title>
+  <style>
+    *{margin:0;padding:0;box-sizing:border-box}
+    :root{
+      --primary:#8b5cf6;
+      --secondary:#ec4899;
+      --bg:#020617;
+      --text:#f9fafb;
+      --muted:#9ca3af;
+      --border:rgba(148,163,184,.2)
+    }
+    body{
+      font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;
+      background:radial-gradient(circle at 0 0,#111827 0,#020617 50%,#020617 100%);
+      color:var(--text);
+      min-height:100vh;
+    }
+    .container{max-width:1120px;margin:0 auto;padding:0 16px}
+    .navbar{
+      position:sticky;top:0;z-index:10;
+      backdrop-filter:blur(12px);
+      background:rgba(15,23,42,.9);
+      border-bottom:1px solid var(--border);
+    }
+    .nav-inner{
+      display:flex;align-items:center;justify-content:space-between;
+      padding:10px 0;
+    }
+    .logo{display:flex;align-items:center;gap:8px;font-weight:700;font-size:18px}
+    .logo span:first-child{font-size:20px}
+    main{padding:32px 0 24px}
+    h1{font-size:28px;margin-bottom:8px;line-height:1.1}
+    .gradient{
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      -webkit-background-clip:text;
+      color:transparent;
+    }
+    .subtitle{
+      font-size:14px;color:var(--muted);max-width:520px;
+      margin-bottom:20px;
+    }
+    .layout{
+      display:grid;
+      grid-template-columns:1.1fr 1.1fr;
+      gap:16px;
+      align-items:flex-start;
+    }
+    @media(max-width:800px){
+      .layout{grid-template-columns:1fr}
+    }
+    .card{
+      border-radius:14px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.96);
+      padding:16px;
+    }
+    label{display:block;margin-bottom:6px;font-size:13px}
+    textarea{
+      width:100%;
+      min-height:120px;
+      resize:vertical;
+      padding:10px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.9);
+      color:var(--text);
+      font-size:13px;
+    }
+    textarea::placeholder{color:var(--muted)}
+    .row{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+    select,input{
+      padding:8px 10px;
+      border-radius:999px;
+      border:1px solid var(--border);
+      background:rgba(15,23,42,.9);
+      color:var(--text);
+      font-size:13px;
+    }
+    button{
+      border-radius:999px;
+      border:none;
+      padding:9px 18px;
+      font-size:14px;
+      font-weight:500;
+      cursor:pointer;
+      background:linear-gradient(135deg,var(--primary),var(--secondary));
+      color:#fff;
+      display:inline-flex;align-items:center;gap:6px;
+    }
+    button:disabled{opacity:.6;cursor:not-allowed}
+    .status{font-size:12px;color:var(--muted);margin-top:6px;min-height:16px}
+    .tabs{display:flex;border-bottom:1px solid var(--border);margin-bottom:8px}
+    .tab-btn{
+      flex:1;
+      padding:6px 8px;
+      font-size:12px;
+      border:none;
+      border-bottom:2px solid transparent;
+      background:none;
+      color:var(--muted);
+    }
+    .tab-btn.active{
+      color:#fff;
+      border-bottom-color:var(--primary);
+    }
+    pre{
+      background:#020617;
+      border-radius:10px;
+      padding:10px;
+      font-size:11px;
+      overflow:auto;
+      max-height:380px;
+      border:1px solid var(--border);
+      white-space:pre;
+    }
+    iframe{
+      width:100%;
+      min-height:380px;
+      border-radius:10px;
+      border:1px solid var(--border);
+      background:#020617;
+    }
+    .small{font-size:11px;color:var(--muted);margin-top:10px}
+  </style>
+</head>
+<body>
+  <div class="navbar">
+    <div class="container">
+      <div class="nav-inner">
+        <div class="logo"><span>✨</span><span>Lovable Clone</span></div>
+        <span style="font-size:11px;color:var(--muted)">Vercel + Groq · mobile</span>
+      </div>
+    </div>
+  </div>
+
+  <main>
+    <div class="container">
+      <h1>Gere <span class="gradient">sites e apps</span> com IA</h1>
+      <p class="subtitle">
+        Descreva o que você quer e este clone gera um arquivo HTML+CSS+JS
+        que você pode baixar ou copiar – tudo direto do seu celular.
+      </p>
+
+      <div class="layout">
+        <!-- ESQUERDA: PROMPT -->
+        <div class="card">
+          <label for="prompt">Descreva seu site ou app</label>
+          <textarea id="prompt" placeholder="Ex: landing page para barbearia moderna com seção de serviços, preços e agendamento por WhatsApp."></textarea>
+
+          <div class="row">
+            <select id="stack">
+              <option value="html">HTML + CSS + JS puro</option>
+              <option value="react">React simples (SPA)</option>
+            </select>
+            <button id="generateBtn">Gerar com IA →</button>
+          </div>
+
+          <div class="status" id="status">Pronto para gerar.</div>
+
+          <div class="small">
+            Dica: detalhe cores, seções, público-alvo e funcionalidades que quer.
+          </div>
+        </div>
+
+        <!-- DIREITA: RESULTADO -->
+        <div class="card">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="preview">Preview</button>
+            <button class="tab-btn" data-tab="code">Código</button>
+          </div>
+
+          <div id="previewTab">
+            <iframe id="previewFrame"></iframe>
+          </div>
+
+          <div id="codeTab" style="display:none">
+            <pre id="codeBox">// o código gerado aparecerá aqui</pre>
+          </div>
+
+          <div class="row" style="margin-top:10px">
+            <button id="copyBtn">Copiar código</button>
+            <button id="downloadBtn">Baixar .html</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const API_URL = '/api/generate';
+
+    const promptEl   = document.getElementById('prompt');
+    const stackEl    = document.getElementById('stack');
+    const statusEl   = document.getElementById('status');
+    const generateEl = document.getElementById('generateBtn');
+    const codeBox    = document.getElementById('codeBox');
+    const iframe     = document.getElementById('previewFrame');
+    const copyBtn    = document.getElementById('copyBtn');
+    const downloadBtn= document.getElementById('downloadBtn');
+
+    let lastCode = '';
+
+    async function generate() {
+      const prompt = promptEl.value.trim();
+      const stack  = stackEl.value;
+
+      if (!prompt) {
+        statusEl.textContent = 'Digite uma descrição primeiro.';
+        return;
+      }
+
+      generateEl.disabled = true;
+      statusEl.textContent = 'Gerando com a IA...';
+
+      try {
+        const res = await fetch(API_URL, {
+          method: 'POST',
+          headers: {'Content-Type':'application/json'},
+          body: JSON.stringify({ prompt, stack })
+        });
+
+        if (!res.ok) throw new Error('Erro HTTP ' + res.status);
+
+        const data = await res.json();
+        if (!data.html) throw new Error('Resposta inválida da API');
+
+        lastCode = data.html;
+        codeBox.textContent = lastCode;
+        statusEl.textContent = 'Gerado com sucesso.';
+
+        const blob = new Blob([lastCode], { type: 'text/html' });
+        const url  = URL.createObjectURL(blob);
+        iframe.src = url;
+
+      } catch (err) {
+        console.error(err);
+        statusEl.textContent = 'Erro ao gerar: ' + err.message;
+      } finally {
+        generateEl.disabled = false;
+      }
+    }
+
+    generateEl.addEventListener('click', generate);
+
+    document.querySelectorAll('.tab-btn').forEach(btn=>{
+      btn.addEventListener('click', ()=>{
+        document.querySelectorAll('.tab-btn').forEach(b=>b.classList.remove('active'));
+        btn.classList.add('active');
+        const tab = btn.dataset.tab;
+        document.getElementById('previewTab').style.display = tab==='preview'?'block':'none';
+        document.getElementById('codeTab').style.display    = tab==='code'?'block':'none';
+      });
+    });
+
+    copyBtn.addEventListener('click', async ()=>{
+      if (!lastCode) return;
+      try{
+        await navigator.clipboard.writeText(lastCode);
+        statusEl.textContent = 'Código copiado.';
+      }catch{
+        statusEl.textContent = 'Seu navegador não permitiu copiar.';
+      }
+    });
+
+    downloadBtn.addEventListener('click', ()=>{
+      if (!lastCode) return;
+      const blob = new Blob([lastCode], {type:'text/html'});
+      const url  = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = 'site-gerado.html';
+      a.click();
+      URL.revokeObjectURL(url);
+    });
+  </script>
+</body>
+</html>
